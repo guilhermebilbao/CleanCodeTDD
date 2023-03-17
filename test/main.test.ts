@@ -110,3 +110,15 @@ test("Deve fazer um pedido calculando o frete", async function () {
 	const output = response.data;
 	expect(output.total).toBe(1030);
 });
+
+test("Deve fazer um pedido calculando o frete", async function () {
+	const input = {
+		cpf: "987.654.321-00",
+		items: [
+			{ idProduct: 3, quantity: 1 },
+		]
+	};
+	const response = await axios.post("http://localhost:3000/checkout", input)
+	const output = response.data;
+	expect(output.total).toBe(40);
+});

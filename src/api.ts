@@ -34,7 +34,8 @@ app.post("/checkout", async function (req, res) {
 			total += parseFloat(product.price) * item.quantity;
 			const volume = (product.width/100)*(product.height/100)*(product.length/100);
 			const density = parseFloat(product.weight)/volume;
-			freight += 1000 * volume * (density/100);
+			const itemFreight = 1000 * volume * (density/100);
+			freight += (itemFreight >= 10) ? itemFreight : 10;
 		} else {
 			return res.status(422).json({
 				message: "Product not found"
