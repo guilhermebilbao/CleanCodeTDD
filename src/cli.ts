@@ -1,4 +1,4 @@
-import { checkout } from "./application";
+import { execute } from "./Checkout";
 
 const input: any = {
     items : []
@@ -17,7 +17,7 @@ process.stdin.on("data",async function (chunk) {
     }
     if (command.startsWith("checkout")) {
         try{
-            const output = await checkout(input);
+            const output = await execute(input);
             console.log(output);
         } catch (error: any) {
             console.log(error.message);

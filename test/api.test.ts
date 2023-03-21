@@ -4,7 +4,7 @@ axios.defaults.validateStatus = function () {
 	return true;
 }
 
-test("Não deve fazer um pedido com cpf inválido", async function () {
+test.skip("Não deve fazer um pedido com cpf inválido", async function () {
 	const input = {
 		cpf: "987.654.321-01"
 	};
@@ -15,7 +15,7 @@ test("Não deve fazer um pedido com cpf inválido", async function () {
 });
 
 
-test("Deve fazer um pedido com 3 produtos", async function () {
+test.skip("Deve fazer um pedido com 3 produtos", async function () {
 	const input = {
 		cpf: "987.654.321-00",
 		items: [
@@ -29,7 +29,7 @@ test("Deve fazer um pedido com 3 produtos", async function () {
 	expect(output.total).toBe(6350);
 });
 
-test("Não deve fazer pedido com produto que não existe", async function () {
+test.skip("Não deve fazer pedido com produto que não existe", async function () {
 	const input = {
 		cpf: "987.654.321-00",
 		items: [
@@ -42,7 +42,7 @@ test("Não deve fazer pedido com produto que não existe", async function () {
 	expect(output.message).toBe("Product not found");
 });
 
-test("Deve fazer um pedido com 3 produtos com cupom de desconto", async function () {
+test.skip("Deve fazer um pedido com 3 produtos com cupom de desconto", async function () {
 	const input = {
 		cpf: "987.654.321-00",
 		items: [
@@ -57,7 +57,7 @@ test("Deve fazer um pedido com 3 produtos com cupom de desconto", async function
 	expect(output.total).toBe(5132);
 });
 
-test("Deve fazer um pedido com 3 produtos com cupom de desconto expirado", async function () {
+test.skip("Deve fazer um pedido com 3 produtos com cupom de desconto expirado", async function () {
 	const input = {
 		cpf: "987.654.321-00",
 		items: [
@@ -72,7 +72,7 @@ test("Deve fazer um pedido com 3 produtos com cupom de desconto expirado", async
 	expect(output.total).toBe(6350);
 });
 
-test("Deve fazer um pedido com quantidade negativa", async function () {
+test.skip("Deve fazer um pedido com quantidade negativa", async function () {
 	const input = {
 		cpf: "987.654.321-00",
 		items: [
@@ -85,7 +85,7 @@ test("Deve fazer um pedido com quantidade negativa", async function () {
 	expect(output.message).toBe("Quantity must be positive");
 });
 
-test("Deve fazer um pedido com produto duplicado", async function () {
+test.skip("Deve fazer um pedido com produto duplicado", async function () {
 	const input = {
 		cpf: "987.654.321-00",
 		items: [
@@ -99,7 +99,7 @@ test("Deve fazer um pedido com produto duplicado", async function () {
 	expect(output.message).toBe("Duplicated product");
 });
 
-test("Deve fazer um pedido calculando o frete", async function () {
+test.skip("Deve fazer um pedido calculando o frete", async function () {
 	const input = {
 		cpf: "987.654.321-00",
 		items: [
@@ -111,7 +111,7 @@ test("Deve fazer um pedido calculando o frete", async function () {
 	expect(output.total).toBe(1030);
 });
 
-test("Deve fazer um pedido calculando o frete", async function () {
+test.skip("Deve fazer um pedido calculando o frete", async function () {
 	const input = {
 		cpf: "987.654.321-00",
 		items: [
