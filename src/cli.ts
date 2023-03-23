@@ -1,4 +1,6 @@
-import { execute } from "./Checkout";
+import Checkout from "./Checkout";
+import CouponDataDatabase from "./CouponDataDatabase";
+import ProductDataDatabase from "./ProductDataDatabase";
 
 const input: any = {
     items : []
@@ -17,7 +19,10 @@ process.stdin.on("data",async function (chunk) {
     }
     if (command.startsWith("checkout")) {
         try{
-            const output = await execute(input);
+            const productData = new ProductDataDatabase();
+            const couponData = new CouponDataDatabase();
+            const checkout = new Checkout(productData, couponData);
+            const output = await checkout.execute(input);
             console.log(output);
         } catch (error: any) {
             console.log(error.message);
