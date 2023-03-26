@@ -2,6 +2,7 @@ import express from "express";
 import pgp from "pg-promise";
 import Checkout from "./Checkout";
 import CouponDataDatabase from "./CouponDataDatabase";
+import OrderDataDatabase from "./OrderDataDatabase";
 import ProductDataDatabase from "./ProductDataDatabase";
 
 const app = express();
@@ -13,7 +14,8 @@ app.post("/checkout", async function (req, res) {
 	try{
 		const productData = new ProductDataDatabase();
 		const couponData = new CouponDataDatabase();
-		const checkout = new Checkout(productData, couponData);
+		const orderData = new OrderDataDatabase();
+		const checkout = new Checkout(productData, couponData, orderData);
 		const output = await checkout.execute(input);
 		res.json(output);
 	} catch (error: any) {

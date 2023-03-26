@@ -4,6 +4,7 @@ import CurrencyGatewayRandom from "./CurrencyGatewayRandom";
 import CurrencyGateway from "./CurrencyGatewayRandom";
 import Mailer from "./Mailer";
 import MailerConsole from "./MailerConsole";
+import OrderData from "./OrderData";
 import ProductData from "./ProductData";
 
 export default class Checkout{
@@ -11,8 +12,10 @@ export default class Checkout{
 	constructor (
 		readonly productData: ProductData, 
 		readonly couponData: CouponData,
+		readonly orderData: OrderData,
 		readonly currencyGateway: CurrencyGateway = new CurrencyGatewayRandom(),
 		readonly mailer: Mailer = new MailerConsole()
+		
 		) {
 
 	}
@@ -57,6 +60,7 @@ export default class Checkout{
 			this.mailer.send(input.email, "Checkout Success", "ABCDEF");
 		}
 		total += freight;
+		await this.orderData.save({ cpf: input.cpf, total});
 		return{
 			total
 		};

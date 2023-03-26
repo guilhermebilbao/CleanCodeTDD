@@ -24,3 +24,24 @@ create table cccat9.coupon (
 
 insert into cccat9.coupon (code, percentage, expire_date) values ('VALE20', 20, '2023-04-03T12:00:00');
 insert into cccat9.coupon (code, percentage, expire_date) values ('VALE20_EXPIRED', 20, '2023-01-03T12:00:00');
+
+create table cccat9.order (
+	id_order serial primary key,
+	code text,
+	coupon_code text,
+	coupon_percentage numeric,
+	cpf text,
+	email text,
+	issue_date timestamp,
+	freight numeric,
+	total numeric,
+	sequance integer
+);
+
+create table cccat9.item (
+	id_order integer references cccat9.order (id_order),
+	id_product integer references cccat9.product (id_product),
+	price numeric,
+	quantity integer,
+	primary key (id_order, id_product)
+);
