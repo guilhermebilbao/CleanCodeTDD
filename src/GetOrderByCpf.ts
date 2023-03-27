@@ -8,7 +8,7 @@ export default class GetOrderByCPF{
   async execute (cpf: string ): Promise<Output>{
     const order = await this.orderData.getByCpf(cpf);
     return{
-        total: order.total
+        total: parseFloat(order.total)
     }
   }
 }

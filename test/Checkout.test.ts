@@ -43,9 +43,12 @@ test("Deve fazer um pedido com 3 produtos", async function () {
 	const productData = new ProductDataDatabase();
     const couponData = new CouponDataDatabase();
 	const orderData: OrderData = {
-		async save  (order: any): Promise<void> {
+		async save(order: any): Promise<void> {
 		},
-		async getByCpf (cpf: string): Promise<any> {
+		async getByCpf(cpf: string): Promise<any> {
+		},
+		async count (): Promise<number> {
+			return 1;
 		}
 	}
     const checkout = new Checkout(productData, couponData, orderData);
@@ -73,9 +76,12 @@ test("Deve fazer um pedido com 4 produtos com moedas diferentes", async function
     const productData = new ProductDataDatabase();
     const couponData = new CouponDataDatabase();
 	const orderData: OrderData = {
-		async save  (order: any): Promise<void> {
+		async save(order: any): Promise<void> {
 		},
-		async getByCpf (cpf: string): Promise<any> {
+		async getByCpf(cpf: string): Promise<any> {
+		},
+		async count (): Promise<number> {
+			return 1;
 		}
 	}
     const checkout = new Checkout(productData, couponData, orderData);
@@ -114,9 +120,12 @@ test("Deve fazer um pedido com 4 produtos com moedas diferentes com mock", async
     const productData = new ProductDataDatabase();
     const couponData = new CouponDataDatabase();
 	const orderData: OrderData = {
-		async save  (order: any): Promise<void> {
+		async save(order: any): Promise<void> {
 		},
-		async getByCpf (cpf: string): Promise<any> {
+		async getByCpf(cpf: string): Promise<any> {
+		},
+		async count (): Promise<number> {
+			return 1;
 		}
 	}
     const checkout = new Checkout(productData, couponData, orderData);
@@ -158,9 +167,12 @@ test("Deve fazer um pedido com 4 produtos com moedas diferentes com fake", async
 		}
 	}
 	const orderData: OrderData = {
-		async save  (order: any): Promise<void> {
+		async save(order: any): Promise<void> {
 		},
-		async getByCpf (cpf: string): Promise<any> {
+		async getByCpf(cpf: string): Promise<any> {
+		},
+		async count (): Promise<number> {
+			return 1;
 		}
 	}
     const checkout = new Checkout(productData, couponData, orderData, currencyGateway, mailer);
@@ -169,3 +181,46 @@ test("Deve fazer um pedido com 4 produtos com moedas diferentes com fake", async
 	expect(log).toHaveLength(1);
 	expect(log[0].to).toBe("guilhermebilbao@gmail.com");
 });   
+test("Deve fazer um pedido com 3 produtos com o código do produto", async function () {
+	const input = {
+		cpf: "987.654.321-00",
+		items: [
+			{ idProduct: 1, quantity: 1 },
+			{ idProduct: 2, quantity: 1 },
+			{ idProduct: 3, quantity: 3 }
+		]
+	};
+	const productData: ProductData = {
+		async getProduct (idProduct: number): Promise<any>{
+			const products: { [idProducs : number] : any }= {
+				1: {idProduct: 1, description: "A", price: 1000, width: 100, heigth: 30, length: 10, weigth: 3},
+				2: {idProduct: 2, description: "B", price: 5000, width: 50, heigth: 50, length: 50, weigth: 22},
+				3: {idProduct: 3, description: "C", price: 30, width: 10, heigth:10, length: 10, weigth: 0.9}
+			}
+			return products[idProduct];
+	}
+}
+	const couponData: CouponData = {
+		async getCoupon (code: string): Promise<any> {
+			const coupons: any = {
+				VALE20: { code: 'VALE20', percentage: 20, expire_date: new Date("2023-04-04T12:00:00") },
+				VALE20_EXPIRED: { code: 'VALE20_EXPIRED', percentage: 20, expire_date: new Date("2022-04-04T12:00:00") }
+			}
+			return coupons[code];
+		}
+	}
+	// const productData = new ProductDataDatabase();
+    // const couponData = new CouponDataDatabase();
+	const orderData: OrderData = {
+		async save(order: any): Promise<void> {
+		},
+		async getByCpf(cpf: string): Promise<any> {
+		},
+		async count (): Promise<number> {
+			return 0;
+		}
+	}
+    const checkout = new Checkout(productData, couponData, orderData);
+    const output = await checkout.execute(input); 
+	expect(output.code).toBe("202300000001");
+});
