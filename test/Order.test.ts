@@ -16,7 +16,7 @@ test("Deve criar um pedido com 3 items", function () {
     order.addItem(new Product(1, "A", 1000, 100, 30, 10, 3), 1);
     order.addItem(new Product(2, "B", 5000, 50, 50, 50, 22), 1);
     order.addItem(new Product(3, "C", 30, 10, 10, 10, 1), 3);
-    expect(order.getTotal()).toBe(6090);
+    expect(order.getTotal()).toBe(6350);
 });
 
 test("Deve criar um pedido com 3 items com cupom", function () {
@@ -25,5 +25,24 @@ test("Deve criar um pedido com 3 items com cupom", function () {
     order.addItem(new Product(2, "B", 5000, 50, 50, 50, 22), 1);
     order.addItem(new Product(3, "C", 30, 10, 10, 10, 1), 3);
     order.addCoupon(new Coupon("VALE20", 20, new Date("2023-04-04T10:00:00")));
-    expect(order.getTotal()).toBe(4872);
+    expect(order.getTotal()).toBe(5132);
+});
+
+test("Não deve criar um pedido com item com quantidade negativa", function () {
+    const order = new Order("987.654.321-00");
+    expect ( () => order.addItem(new Product(1, "A", 1000, 100, 30, 10, 3), -1)).toThrow(new Error("Quantity must be positive"));
+});
+
+test("Não deve criar um pedido com item duplicado", function () {
+    const order = new Order("987.654.321-00");
+    order.addItem(new Product(1, "A", 1000, 100, 30, 10, 3), 1);
+    expect ( () => order.addItem(new Product(1, "A", 1000, 100, 30, 10, 3), 1)).toThrow(new Error("Duplicated product"));
+});
+
+test("Deve criar um pedido com 3 items com codigo", function () {
+    const order = new Order("987.654.321-00", new Date("2023-04-04T10:00:00"), 1);
+    order.addItem(new Product(1, "A", 1000, 100, 30, 10, 3), 1);
+    order.addItem(new Product(2, "B", 5000, 50, 50, 50, 22), 1);
+    order.addItem(new Product(3, "C", 30, 10, 10, 10, 1), 3);
+    expect(order.getCode()).toBe("202300000001");
 });
