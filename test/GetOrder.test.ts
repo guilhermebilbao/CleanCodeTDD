@@ -4,7 +4,7 @@ import GetOrderByCPF from "../src/GetOrderByCpf";
 import OrderDataDatabase from "../src/OrderDataDatabase";
 import ProductDataDatabase from "../src/ProductDataDatabase"
 
-test.skip("Deve consultar um pedido", async function () {
+test("Deve consultar um pedido", async function () {
     const productData = new ProductDataDatabase();
     const couponData = new CouponDataDatabase();
     const orderData = new OrderDataDatabase();

@@ -10,12 +10,7 @@ export default class SimulateFreight {
         let total = 0;
         for (const item of input.items) {
 			const product = await this.productData.getProduct(item.idProduct);
-			if (product) {
-                total += FreightCalculator.calculate(product);
-
-			} else {
-				throw new Error("Product not found");
-			}
+            total += FreightCalculator.calculate(product);
 		}
         return {
             total

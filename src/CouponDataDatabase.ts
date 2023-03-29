@@ -8,6 +8,6 @@ export default class CouponDataDatabase implements CouponData {
     const [couponData] = await connection.query("select * from cccat9.coupon where code = $1", [code]);
     await connection.$pool.end();
     if(!couponData) throw new Error("Coupon not found");
-    return new Coupon(couponData.code, parseFloat(couponData.percentage), couponData.expireDate);
+    return new Coupon(couponData.code, parseFloat(couponData.percentage), couponData.expire_date);
     }    
 }

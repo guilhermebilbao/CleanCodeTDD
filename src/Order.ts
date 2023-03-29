@@ -1,5 +1,6 @@
 import Coupon from "./Coupon";
 import Cpf from "./Cpf";
+import Currencies from "./Currencies";
 import FreightCalculator from "./FreightCalculator";
 import Item from "./Item";
 import OrderCode from "./OrderCode";
@@ -19,9 +20,9 @@ export default class Order {
         this.code = new OrderCode(date, sequence);
     }
 
-    addItem (product: Product, quantity: number) {
+    addItem (product: Product, quantity: number, currencyCode: string = "BRL", currencyValue: number = 1) {
         if (this.items.some((item) => item.idProduct === product.idProduct)) throw new Error("Duplicated product");
-        this.items.push(new Item( product.idProduct, product.price, quantity));
+        this.items.push(new Item( product.idProduct, product.price, quantity, currencyCode, currencyValue));
         this.freight += FreightCalculator.calculate(product);
     }
 

@@ -9,6 +9,6 @@ export default class ProductDataDatabase implements ProductData {
     await connection.$pool.end();
     if(!productData) throw new Error("Product not found");
     return new Product(productData.id_product, productData.description, parseFloat(productData.price),
-        productData.width, productData.height, productData.length, productData.weight);
+        productData.width, productData.height, productData.length, productData.weight, productData.currency);
     }    
 }

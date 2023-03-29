@@ -24,10 +24,11 @@ export default class Checkout{
 	}
 
 	async execute (input: Input) {
+		const currencies = await this.currencyGateway.getCurrencies();
 		const order = new Order(input.cpf);
 		for(const item of input.items){
 			const product = await this.productData.getProduct(item.idProduct);
-			order.addItem(product, item.quantity);
+			order.addItem(product, item.quantity, product.currency, currencies.getCurrency(product.currency));
 		}
 		if (input.coupon) {
 			const coupon = await this.couponData.getCoupon(input.coupon);
