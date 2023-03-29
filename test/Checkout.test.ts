@@ -1,15 +1,16 @@
-import Checkout from "../src/Checkout";
-import CouponData from "../src/CouponData";
-import CouponDataDatabase from "../src/CouponDataDatabase";
-import ProductData from "../src/ProductData";
-import ProductDataDatabase from "../src/ProductDataDatabase";
+import Checkout from "../src/application/Checkout";
+import CouponData from "../src/domain/data/CouponData";
+import CouponDataDatabase from "../src/infra/data/CouponDataDatabase";
+import ProductData from "../src/domain/data/ProductData";
+import ProductDataDatabase from "../src/infra/data/ProductDataDatabase";
 import sinon from "sinon";
-import CurrencyGateway from "../src/CurrencyGatewayRandom";
-import MailerConsole from "../src/MailerConsole";
-import Mailer from "../src/Mailer";
-import OrderDataDatabase from "../src/OrderDataDatabase";
-import OrderData from "../src/OrderData";
-import Currencies from "../src/Currencies";
+import CurrencyGateway from "../src/infra/gateway/CurrencyGatewayRandom";
+import MailerConsole from "../src/infra/mailer/MailerConsole";
+import Mailer from "../src/infra/mailer/Mailer";
+import OrderDataDatabase from "../src/infra/data/OrderDataDatabase";
+import OrderData from "../src/domain/data/OrderData";
+import Currencies from "../src/domain/entities/Currencies";
+import PgPromiseConnection from "../src/infra/database/PgPromiseConnection";
 
 test("Deve fazer um pedido com 3 produtos", async function () {
 	const input = {
@@ -41,8 +42,9 @@ test("Deve fazer um pedido com 3 produtos", async function () {
 // 			return coupons[code];
 // 		}
 // 	}
-	const productData = new ProductDataDatabase();
-    const couponData = new CouponDataDatabase();
+	const connection = new PgPromiseConnection();
+	const productData = new ProductDataDatabase(connection);
+    const couponData = new CouponDataDatabase(connection);
 	const orderData: OrderData = {
 		async save(order: any): Promise<void> {
 		},
@@ -73,8 +75,9 @@ test("Deve fazer um pedido com 4 produtos com moedas diferentes", async function
 			{ idProduct: 4, quantity: 1 }
 		]
 	};
-    const productData = new ProductDataDatabase();
-    const couponData = new CouponDataDatabase();
+	const connection = new PgPromiseConnection();
+    const productData = new ProductDataDatabase(connection);
+    const couponData = new CouponDataDatabase(connection);
 	const orderData: OrderData = {
 		async save(order: any): Promise<void> {
 		},
@@ -116,8 +119,9 @@ test("Deve fazer um pedido com 4 produtos com moedas diferentes com mock", async
 			{ idProduct: 4, quantity: 1 }
 		]
 	};
-    const productData = new ProductDataDatabase();
-    const couponData = new CouponDataDatabase();
+	const connection = new PgPromiseConnection();
+    const productData = new ProductDataDatabase(connection);
+    const couponData = new CouponDataDatabase(connection);
 	const orderData: OrderData = {
 		async save(order: any): Promise<void> {
 		},
@@ -152,8 +156,9 @@ test.skip("Deve fazer um pedido com 4 produtos com moedas diferentes com fake", 
 			{ idProduct: 4, quantity: 1 }
 		]
 	};
-    const productData = new ProductDataDatabase();
-    const couponData = new CouponDataDatabase();
+	const connection = new PgPromiseConnection();
+    const productData = new ProductDataDatabase(connection);
+    const couponData = new CouponDataDatabase(connection);
 	const currencyGateway : CurrencyGateway = {
 		async getCurrencies(): Promise<any> {
 			return currencies;

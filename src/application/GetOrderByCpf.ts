@@ -1,8 +1,8 @@
-import orderData from "./OrderData";
+import OrderData from "../domain/data/OrderData";
 
 export default class GetOrderByCPF{
 
-  constructor (readonly orderData: orderData){
+  constructor (readonly orderData: OrderData){
   }
 
   async execute (cpf: string ): Promise<Output>{

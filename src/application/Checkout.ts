@@ -1,15 +1,15 @@
-import Coupon from "./Coupon";
-import CouponData from "./CouponData";
-import { validate } from "./CpfValidator";
-import CurrencyGatewayRandom from "./CurrencyGatewayRandom";
-import CurrencyGateway from "./CurrencyGatewayRandom";
-import FreightCalculator from "./FreightCalculator";
-import Mailer from "./Mailer";
-import MailerConsole from "./MailerConsole";
-import Order from "./Order";
-import OrderCode from "./OrderCode";
-import OrderData from "./OrderData";
-import ProductData from "./ProductData";
+import Coupon from "../domain/entities/Coupon";
+import CouponData from "../domain/data/CouponData";
+import { validate } from "../domain/entities/CpfValidator";
+import CurrencyGatewayRandom from "../infra/gateway/CurrencyGatewayRandom";
+import CurrencyGateway from "../infra/gateway/CurrencyGatewayRandom";
+import FreightCalculator from "../domain/entities/FreightCalculator";
+import Mailer from "../infra/mailer/Mailer";
+import MailerConsole from "../infra/mailer/MailerConsole";
+import Order from "../domain/entities/Order";
+import OrderCode from "../domain/entities/OrderCode";
+import OrderData from "../domain/data/OrderData";
+import ProductData from "../domain/data/ProductData";
 
 export default class Checkout{
 

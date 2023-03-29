@@ -1,8 +1,9 @@
 import amqp from "amqplib";
-import Checkout from "./Checkout";
-import CouponDataDatabase from "./CouponDataDatabase";
-import OrderDataDatabase from "./OrderDataDatabase";
-import ProductDataDatabase from "./ProductDataDatabase";
+import Checkout from "./application/Checkout";
+import CouponDataDatabase from "./infra/data/CouponDataDatabase";
+import OrderDataDatabase from "./infra/data/OrderDataDatabase";
+import ProductDataDatabase from "./infra/data/ProductDataDatabase";
+import PgPromiseConnection from "./infra/database/PgPromiseConnection";
 
 async function init () {
 	const connectionQueue = await amqp.connect("amqp://localhost");
@@ -11,9 +12,10 @@ async function init () {
     await channel.consume("checkout", async function (msg:any) {
         const input = JSON.parse(msg.content.toString());
         try{
-            const productData = new ProductDataDatabase();
-            const couponData = new CouponDataDatabase();
-            const orderData = new OrderDataDatabase();
+            const connection = new PgPromiseConnection();
+            const productData = new ProductDataDatabase(connection);
+            const couponData = new CouponDataDatabase(connection);
+            const orderData = new OrderDataDatabase(connection);
             const checkout = new Checkout(productData, couponData, orderData);
             const output = await checkout.execute(input);
             console.log(output);
