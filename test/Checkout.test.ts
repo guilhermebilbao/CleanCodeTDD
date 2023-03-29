@@ -141,7 +141,7 @@ test("Deve fazer um pedido com 4 produtos com moedas diferentes com mock", async
 
 });   
 
-test.skip("Deve fazer um pedido com 4 produtos com moedas diferentes com fake", async function () {;
+test("Deve fazer um pedido com 4 produtos com moedas diferentes com fake", async function () {;
 	//const mailerStub = sinon.stub(Mailer.prototype, "send").resolves();
 	const currencies = new Currencies();
 	currencies.addCurrency("USD", 2);

@@ -11,7 +11,7 @@ import OrderCode from "../domain/entities/OrderCode";
 import OrderData from "../domain/data/OrderData";
 import ProductData from "../domain/data/ProductData";
 
-export default class Checkout{
+export default class Checkout {
 
 	constructor (
 		readonly productData: ProductData, 
@@ -19,14 +19,13 @@ export default class Checkout{
 		readonly orderData: OrderData,
 		readonly currencyGateway: CurrencyGateway = new CurrencyGatewayRandom(),
 		readonly mailer: Mailer = new MailerConsole()
-		
-		) {
+	) {
 	}
 
 	async execute (input: Input) {
 		const currencies = await this.currencyGateway.getCurrencies();
 		const order = new Order(input.cpf);
-		for(const item of input.items){
+		for (const item of input.items) {
 			const product = await this.productData.getProduct(item.idProduct);
 			order.addItem(product, item.quantity, product.currency, currencies.getCurrency(product.currency));
 		}
@@ -35,16 +34,17 @@ export default class Checkout{
 			order.addCoupon(coupon);
 		}
 		await this.orderData.save(order);
-		return{
-			code:  order.getCode(),
+		return {
+			code: order.getCode(),
 			total: order.getTotal()
 		};
 	}
 }
 
+
 type Input = {
-    cpf: string,
+	cpf: string,
 	email?: string,
-    items: {idProduct: number, quantity: number} [],
-    coupon? : string,
+	items: { idProduct: number, quantity: number }[],
+	coupon?: string
 };
