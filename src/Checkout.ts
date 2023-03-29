@@ -6,6 +6,7 @@ import CurrencyGateway from "./CurrencyGatewayRandom";
 import FreightCalculator from "./FreightCalculator";
 import Mailer from "./Mailer";
 import MailerConsole from "./MailerConsole";
+import Order from "./Order";
 import OrderCode from "./OrderCode";
 import OrderData from "./OrderData";
 import ProductData from "./ProductData";
@@ -20,57 +21,23 @@ export default class Checkout{
 		readonly mailer: Mailer = new MailerConsole()
 		
 		) {
-
 	}
 
 	async execute (input: Input) {
-		const isValid = validate(input.cpf);
-		if (!isValid) {
-			throw new Error( "Invalid cpf");
-		}
-		let total = 0;
-		let freight = 0;
-		const currencies : any = await this.currencyGateway.getCurrencies();
-		const productsIds : number[] = [];
-		for (const item of input.items) {
-			if (productsIds.some(idProduct => idProduct === item.idProduct)){
-				throw new Error("Duplicated product");
-			}
-			productsIds.push(item.idProduct)
+		const order = new Order(input.cpf);
+		for(const item of input.items){
 			const product = await this.productData.getProduct(item.idProduct);
-			if (product) {
-				if (item.quantity <= 0){
-					throw new Error( "Quantity must be positive");
-				}
-				total += parseFloat(product.price) * (currencies[product.currency] || 1) * item.quantity;
-				freight += FreightCalculator.calculate(product);
-
-			} else {
-				throw new Error("Product not found");
-			}
+			order.addItem(product, item.quantity);
 		}
 		if (input.coupon) {
-			const couponData = await this.couponData.getCoupon(input.coupon);
-			const coupon = new Coupon(couponData.code, parseFloat(couponData.percentage), couponData.expire_date);
-
-			if (coupon && !coupon.isExpired()) {
-				total -= coupon.getDiscount(total);
-			}
+			const coupon = await this.couponData.getCoupon(input.coupon);
+			order.addCoupon(coupon);
 		}
-		if (input.email){
-			this.mailer.send(input.email, "Checkout Success", "ABCDEF");
-		}
-		total += freight;
-		const today = new Date();
-		const sequence = await this.orderData.count() + 1;
-		const orderCode = new OrderCode(today, sequence);
-		const code = orderCode.getValue();
-		await this.orderData.save({ cpf: input.cpf, total});
+		await this.orderData.save(order);
 		return{
-			code,
-			total
+			code:  order.getCode(),
+			total: order.getTotal()
 		};
-		
 	}
 }
 

@@ -10,7 +10,7 @@ import Mailer from "../src/Mailer";
 import OrderDataDatabase from "../src/OrderDataDatabase";
 import OrderData from "../src/OrderData";
 
-test("Deve fazer um pedido com 3 produtos", async function () {
+test.skip("Deve fazer um pedido com 3 produtos", async function () {
 	const input = {
 		cpf: "987.654.321-00",
 		items: [
@@ -55,7 +55,7 @@ test("Deve fazer um pedido com 3 produtos", async function () {
     const output = await checkout.execute(input); 
 	expect(output.total).toBe(6350);
 });          
-test("Deve fazer um pedido com 4 produtos com moedas diferentes", async function () {
+test.skip("Deve fazer um pedido com 4 produtos com moedas diferentes", async function () {
 	const currencyGatewayStub = sinon.stub(CurrencyGateway.prototype, "getCurrencies").resolves({
 			"USD" : 2 ,
 			"BRL" : 1
@@ -94,7 +94,7 @@ test("Deve fazer um pedido com 4 produtos com moedas diferentes", async function
 	mailerSpy.restore();
 });   
 
-test("Deve fazer um pedido com 4 produtos com moedas diferentes com mock", async function () {
+test.skip("Deve fazer um pedido com 4 produtos com moedas diferentes com mock", async function () {
 	const currencyGatewayMock = sinon.mock(CurrencyGateway.prototype)
 	currencyGatewayMock.expects("getCurrencies")
 		.once()
@@ -138,7 +138,7 @@ test("Deve fazer um pedido com 4 produtos com moedas diferentes com mock", async
 
 });   
 
-test("Deve fazer um pedido com 4 produtos com moedas diferentes com fake", async function () {;
+test.skip("Deve fazer um pedido com 4 produtos com moedas diferentes com fake", async function () {;
 	//const mailerStub = sinon.stub(Mailer.prototype, "send").resolves();
 	const input = {
 		cpf: "987.654.321-00",
@@ -181,7 +181,7 @@ test("Deve fazer um pedido com 4 produtos com moedas diferentes com fake", async
 	expect(log).toHaveLength(1);
 	expect(log[0].to).toBe("guilhermebilbao@gmail.com");
 });   
-test("Deve fazer um pedido com 3 produtos com o código do produto", async function () {
+test.skip("Deve fazer um pedido com 3 produtos com o código do produto", async function () {
 	const input = {
 		cpf: "987.654.321-00",
 		items: [

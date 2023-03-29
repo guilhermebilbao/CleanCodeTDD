@@ -1,11 +1,12 @@
 import orderData from "./OrderData";
 import pgp from "pg-promise";
+import Order from "./Order";
 
 export default class OrderDataDatabase implements orderData{
 
-    async save(order: any): Promise<void> {
+    async save(order: Order): Promise<void> {
         const connection = pgp()("postgres://postgres:postgres@localhost:5432/app");
-        await connection.query("insert into cccat9.order (cpf, total) values ($1, $2)", [order.cpf, order.total]);
+        await connection.query("insert into cccat9.order (cpf, total) values ($1, $2)", [order.cpf.getValue, order.getTotal]);
         await connection.$pool.end();
 
     }

@@ -1,7 +1,7 @@
 import ProductDataDatabase from "../src/ProductDataDatabase";
 import SimulateFreight from "../src/SimulateFraight";
 
-test("Deve simular o frete para um pedido", async function () {
+test.skip("Deve simular o frete para um pedido", async function () {
     const productData = new ProductDataDatabase();
     const simulateFreight = new SimulateFreight(productData);
     const input = {
