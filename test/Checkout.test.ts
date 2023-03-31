@@ -11,6 +11,7 @@ import OrderDataDatabase from "../src/infra/data/OrderDataDatabase";
 import OrderData from "../src/domain/data/OrderData";
 import Currencies from "../src/domain/entities/Currencies";
 import PgPromiseConnection from "../src/infra/database/PgPromiseConnection";
+import Product from "../src/domain/entities/Product";
 
 test("Deve fazer um pedido com 3 produtos", async function () {
 	const input = {
@@ -195,11 +196,11 @@ test("Deve fazer um pedido com 3 produtos com o código do pedido", async functi
 		]
 	};
 	const productData: ProductData = {
-		async getProduct (idProduct: number): Promise<any>{
-			const products: { [idProducs : number] : any }= {
-				1: {idProduct: 1, description: "A", price: 1000, width: 100, heigth: 30, length: 10, weigth: 3},
-				2: {idProduct: 2, description: "B", price: 5000, width: 50, heigth: 50, length: 50, weigth: 22},
-				3: {idProduct: 3, description: "C", price: 30, width: 10, heigth:10, length: 10, weigth: 0.9}
+		async getProduct (idProduct: number): Promise<Product>{
+			const products: { [idProducs : number] : Product }= {
+				1: new Product ( 1,  "A",  1000,  100,  30,  10,  3),
+				2: new Product ( 2,  "B",  5000, 50,  50,  50,  22),
+				3: new Product ( 3,  "C",  30,  10, 10,  10,  0.9)
 			}
 			return products[idProduct];
 	}
