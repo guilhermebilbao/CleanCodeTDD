@@ -12,17 +12,40 @@ import { reactive } from 'vue';
   });
 
   const addItem = function (product: any) {
-    order.items.push({ idProduct: product.idProduct, price: product.price, quantity: 1 });
+    const existingItem = order.items.find((item: any) => item.idProduct === product.idProduct);
+    if (!existingItem){
+      order.items.push({ idProduct: product.idProduct, price: product.price, quantity: 1 });
+    }else {
+      existingItem.quantity++;
+    }
+}
+
+  const decreaseItem = function (idProduct : any) {
+    const existingItem = order.items.find((item: any) => item.idProduct === idProduct);
+    if (!existingItem) return;
+      existingItem.quantity--;
   }
 
+  const increaseItem = function (idProduct : any) {
+    const existingItem = order.items.find((item: any) => item.idProduct === idProduct);
+    if (!existingItem) return;
+      existingItem.quantity++;
+  }
+  
   const getTotal = function () {
     let total = 0;
     for (const item of order.items){
-      total += item.price
+      total += item.price * item.quantity;
     }
     return total;
   }
+	const formatMoney = function (amount: number) {
+		return new Intl.NumberFormat("en-IN", { style: "currency", currency: "USD" }).format(amount);
+	}
 
+  const getProductById = function (idProduct: number) {
+		return products.find((product: any) => product.idProduct === idProduct);
+	}
 
 </script>
 
@@ -30,10 +53,17 @@ import { reactive } from 'vue';
   <div class="title">Checkout</div>
   <div v-for="product in products">
 		<span class="product-description">{{ product.description }}</span>
-		<span class="product-price">{{ product.price }}</span>
+		<span class="product-price">{{ formatMoney(product.price) }}</span>
     <button class="product-add-button" @click="addItem(product)">add</button>
 	</div>
-  <div class="total">{{ getTotal() }}</div>
+  <div class="total">{{ formatMoney(getTotal()) }}</div>
+  <div v-for="item in order.items">
+		<span class="item-description">{{ getProductById(item.idProduct)?.description }}</span>
+    <span class="item-quantity">{{ item.quantity }}</span>
+    <button class="item-increase-button" @click="increaseItem(item.idProduct)">+</button>
+    <button class="item-decrease-button" @click="decreaseItem(item.idProduct)">-</button>
+
+  </div>
 </template>
 
 <style scoped>
