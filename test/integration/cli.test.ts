@@ -1,12 +1,12 @@
 import sinon from "sinon";
-import Checkout from "../src/application/Checkout";
-import CLIController from "../src/infra/cli/CLIController";
-import CLIHandler from "../src/infra/cli/CLIHandler";
-import CLIHandlerMemory from "../src/infra/cli/CLIHandlerMemory";
-import CouponDataDatabase from "../src/infra/data/CouponDataDatabase";
-import OrderDataDatabase from "../src/infra/data/OrderDataDatabase";
-import ProductDataDatabase from "../src/infra/data/ProductDataDatabase";
-import PgPromiseConnection from "../src/infra/database/PgPromiseConnection";
+import Checkout from "../../src/application/Checkout";
+import CLIController from "../../src/infra/cli/CLIController";
+import CLIHandler from "../../src/infra/cli/CLIHandler";
+import CLIHandlerMemory from "../../src/infra/cli/CLIHandlerMemory";
+import CouponDataDatabase from "../../src/infra/data/CouponDataDatabase";
+import OrderDataDatabase from "../../src/infra/data/OrderDataDatabase";
+import ProductDataDatabase from "../../src/infra/data/ProductDataDatabase";
+import PgPromiseConnection from "../../src/infra/database/PgPromiseConnection";
 
 
 test("Deve testar o cli", async function () {

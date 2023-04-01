@@ -1,6 +1,6 @@
-import ProductDataDatabase from "../src/infra/data/ProductDataDatabase";
-import SimulateFreight from "../src/application/SimulateFreight";
-import PgPromiseConnection from "../src/infra/database/PgPromiseConnection";
+import ProductDataDatabase from "../../src/infra/data/ProductDataDatabase";
+import SimulateFreight from "../../src/application/SimulateFreight";
+import PgPromiseConnection from "../../src/infra/database/PgPromiseConnection";
 
 test("Deve simular o frete para um pedido", async function () {
     const connection = new PgPromiseConnection();
