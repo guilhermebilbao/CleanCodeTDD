@@ -1,6 +1,8 @@
 import { mount } from "@vue/test-utils";
 import AppVue from "../src/App.vue";
+import Product from "../src/domain/Product";
 import CheckoutGatewayHttp from "../src/infra/gateway/CheckoutGatewayHttp";
+import AxiosAdapter from "../src/infra/gateway/http/AxiosAdapter";
 
 function sleep (time: number) {
 	return new Promise((resolve) => {
@@ -11,7 +13,9 @@ function sleep (time: number) {
 }
 
 test("Deve apresentar um pedido vazio", async function () {
-    const checkoutGateway = new CheckoutGatewayHttp();
+    const httpClient = new AxiosAdapter();
+	const baseUrl = "http://localhost:3000";
+	const checkoutGateway = new CheckoutGatewayHttp(httpClient, baseUrl);
     const wrapper = mount(AppVue, {
         global: {
             provide: {
@@ -30,7 +34,9 @@ test("Deve apresentar um pedido vazio", async function () {
 });
 
 test("Deve ter um pedido com apenas 1 item", async function () {
-    const checkoutGateway = new CheckoutGatewayHttp();
+    const httpClient = new AxiosAdapter();
+	const baseUrl = "http://localhost:3000";
+	const checkoutGateway = new CheckoutGatewayHttp(httpClient, baseUrl);
     const wrapper = mount(AppVue, {
         global: {
             provide: {
@@ -47,7 +53,9 @@ test("Deve ter um pedido com apenas 1 item", async function () {
 });
 
 test("Deve pedir varios items e quantidade maior que 1", async function () {
-    const checkoutGateway = new CheckoutGatewayHttp();
+    const httpClient = new AxiosAdapter();
+	const baseUrl = "http://localhost:3000";
+	const checkoutGateway = new CheckoutGatewayHttp(httpClient, baseUrl);
     const wrapper = mount(AppVue, {
         global: {
             provide: {
@@ -70,7 +78,9 @@ test("Deve pedir varios items e quantidade maior que 1", async function () {
 });
 
 test("Deve pedir varios itens e decrementar a quantidade do itens do pedido", async function () {
-    const checkoutGateway = new CheckoutGatewayHttp();
+    const httpClient = new AxiosAdapter();
+	const baseUrl = "http://localhost:3000";
+	const checkoutGateway = new CheckoutGatewayHttp(httpClient, baseUrl);
     const wrapper = mount(AppVue, {
         global: {
             provide: {
@@ -91,7 +101,9 @@ test("Deve pedir varios itens e decrementar a quantidade do itens do pedido", as
 });
 
 test("Deve pedir varios itens e incrementar a quantidade do itens do pedido", async function () {
-    const checkoutGateway = new CheckoutGatewayHttp();
+    const httpClient = new AxiosAdapter();
+	const baseUrl = "http://localhost:3000";
+	const checkoutGateway = new CheckoutGatewayHttp(httpClient, baseUrl);
     const wrapper = mount(AppVue, {
         global: {
             provide: {
@@ -110,7 +122,9 @@ test("Deve pedir varios itens e incrementar a quantidade do itens do pedido", as
 });
 
 test("Deve pedir varios itens e decrementar a quantidade do itens do pedido e nao permitir quantidade menor que zero", async function () {
-    const checkoutGateway = new CheckoutGatewayHttp();
+    const httpClient = new AxiosAdapter();
+	const baseUrl = "http://localhost:3000";
+	const checkoutGateway = new CheckoutGatewayHttp(httpClient, baseUrl);
     const wrapper = mount(AppVue, {
         global: {
             provide: {
@@ -127,7 +141,19 @@ test("Deve pedir varios itens e decrementar a quantidade do itens do pedido e na
 });
 
 test("Deve confirmar um pedido com 1 item", async function () {
-    const checkoutGateway = new CheckoutGatewayHttp();
+    const checkoutGateway: CheckoutGatewayHttp = {
+        async getProducts (): Promise<Product[]> {
+            return [
+                { idProduct: 4, description: "D", price: 1000}
+            ]
+        },
+        async checkout (input: any): Promise<any> {
+            return {
+                code: "202300000001",
+                total: 1030
+            }
+        }
+    }
     const wrapper = mount(AppVue, {
         global: {
             provide: {
@@ -145,7 +171,19 @@ test("Deve confirmar um pedido com 1 item", async function () {
 });
 
 test("Deve ter 4 produtos", async function () {
-    const checkoutGateway = new CheckoutGatewayHttp();
+    const checkoutGateway: CheckoutGatewayHttp = {
+        async getProducts (): Promise<Product[]> {
+            return [
+                { idProduct: 4, description: "D", price: 1000}
+            ]
+        },
+        async checkout (input: any): Promise<any> {
+            return {
+                code: "202300000001",
+                total: 1030
+            }
+        }
+    }
     const wrapper = mount(AppVue, {
         global: {
             provide: {
