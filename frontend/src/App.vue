@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { isTemplateNode } from '@vue/compiler-core';
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
+import axios from "axios";
 
   const products = reactive([
       { idProduct: 1, description: "A", price: 1000 },
@@ -10,7 +11,9 @@ import { reactive, ref } from 'vue';
 
   const order = reactive({
     code : "",
-    items: [] as any
+    cpf: "987.654.321-00",
+    items: [] as any,
+    tota: "0"
   });
 
   const message = ref("");
@@ -56,10 +59,19 @@ import { reactive, ref } from 'vue';
 
 
 	const confirm = async function (order: any) {
-    message.value = "Success";
-		order.code = "202300000001"
+    const response = await axios.post("http://localhost:3000/checkout", order);
+		const orderData = response.data;
+		order.code = orderData.code;
+		order.total = orderData.total;
+		message.value = "Success";
 	
 	}
+
+  onMounted (async () => {
+    const response = await axios.get("http://localhost:3000/products");
+    const productsData = response.data;
+    products.push(...productsData);
+  });
 
 </script>
 
@@ -80,6 +92,7 @@ import { reactive, ref } from 'vue';
   <button class="confirm" @click="confirm(order)">confirm</button>
 	<div class="message">{{ message }}</div>
   <div class="order-code">{{ order.code }}</div>
+  <div class="order-total">{{ order.total }}</div>
 </template>
 
 <style scoped>
