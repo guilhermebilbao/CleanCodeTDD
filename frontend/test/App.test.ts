@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import AppVue from "../src/App.vue";
+import CheckoutGatewayHttp from "../src/infra/gateway/CheckoutGatewayHttp";
 
 function sleep (time: number) {
 	return new Promise((resolve) => {
@@ -10,7 +11,14 @@ function sleep (time: number) {
 }
 
 test("Deve apresentar um pedido vazio", async function () {
-    const wrapper = mount(AppVue, {});
+    const checkoutGateway = new CheckoutGatewayHttp();
+    const wrapper = mount(AppVue, {
+        global: {
+            provide: {
+                checkoutGateway
+            }
+        }
+    });
     expect(wrapper.get(".title").text()).toBe("Checkout");   
     expect(wrapper.findAll(".product-description").at(0)?.text()).toBe("A");
 	expect(wrapper.findAll(".product-price").at(0)?.text()).toBe("$1,000.00");
@@ -22,7 +30,14 @@ test("Deve apresentar um pedido vazio", async function () {
 });
 
 test("Deve ter um pedido com apenas 1 item", async function () {
-    const wrapper = mount(AppVue, {});
+    const checkoutGateway = new CheckoutGatewayHttp();
+    const wrapper = mount(AppVue, {
+        global: {
+            provide: {
+                checkoutGateway
+            }
+        }
+    });
 	expect(wrapper.findAll(".product-description").at(0)?.text()).toBe("A");
 	expect(wrapper.findAll(".product-price").at(0)?.text()).toBe("$1,000.00");
     await wrapper.findAll(".product-add-button").at(0)?.trigger("click");
@@ -32,7 +47,14 @@ test("Deve ter um pedido com apenas 1 item", async function () {
 });
 
 test("Deve pedir varios items e quantidade maior que 1", async function () {
-    const wrapper = mount(AppVue, {});
+    const checkoutGateway = new CheckoutGatewayHttp();
+    const wrapper = mount(AppVue, {
+        global: {
+            provide: {
+                checkoutGateway
+            }
+        }
+    });
     await wrapper.findAll(".product-add-button").at(0)?.trigger("click");
     await wrapper.findAll(".product-add-button").at(1)?.trigger("click");
     await wrapper.findAll(".product-add-button").at(2)?.trigger("click");
@@ -48,7 +70,14 @@ test("Deve pedir varios items e quantidade maior que 1", async function () {
 });
 
 test("Deve pedir varios itens e decrementar a quantidade do itens do pedido", async function () {
-    const wrapper = mount(AppVue, {});
+    const checkoutGateway = new CheckoutGatewayHttp();
+    const wrapper = mount(AppVue, {
+        global: {
+            provide: {
+                checkoutGateway
+            }
+        }
+    });
     await wrapper.findAll(".product-add-button").at(0)?.trigger("click");
     await wrapper.findAll(".product-add-button").at(1)?.trigger("click");
     await wrapper.findAll(".product-add-button").at(2)?.trigger("click");
@@ -62,7 +91,14 @@ test("Deve pedir varios itens e decrementar a quantidade do itens do pedido", as
 });
 
 test("Deve pedir varios itens e incrementar a quantidade do itens do pedido", async function () {
-    const wrapper = mount(AppVue, {});
+    const checkoutGateway = new CheckoutGatewayHttp();
+    const wrapper = mount(AppVue, {
+        global: {
+            provide: {
+                checkoutGateway
+            }
+        }
+    });
     await wrapper.findAll(".product-add-button").at(0)?.trigger("click");
     expect(wrapper.get(".total").text()).toBe("$1,000.00");
     expect(wrapper.findAll(".item-quantity").at(0)?.text()).toBe("1");
@@ -74,7 +110,14 @@ test("Deve pedir varios itens e incrementar a quantidade do itens do pedido", as
 });
 
 test("Deve pedir varios itens e decrementar a quantidade do itens do pedido e nao permitir quantidade menor que zero", async function () {
-    const wrapper = mount(AppVue, {});
+    const checkoutGateway = new CheckoutGatewayHttp();
+    const wrapper = mount(AppVue, {
+        global: {
+            provide: {
+                checkoutGateway
+            }
+        }
+    });
     await wrapper.findAll(".product-add-button").at(0)?.trigger("click"); 
     await wrapper.findAll(".item-decrease-button").at(0)?.trigger("click");
     await wrapper.findAll(".item-decrease-button").at(0)?.trigger("click"); 
@@ -84,7 +127,14 @@ test("Deve pedir varios itens e decrementar a quantidade do itens do pedido e na
 });
 
 test("Deve confirmar um pedido com 1 item", async function () {
-    const wrapper = mount(AppVue, {});
+    const checkoutGateway = new CheckoutGatewayHttp();
+    const wrapper = mount(AppVue, {
+        global: {
+            provide: {
+                checkoutGateway
+            }
+        }
+    });
     await wrapper.findAll(".product-add-button").at(0)?.trigger("click");
     await wrapper.get(".confirm").trigger("click");
     await sleep (100);
@@ -95,7 +145,14 @@ test("Deve confirmar um pedido com 1 item", async function () {
 });
 
 test("Deve ter 4 produtos", async function () {
-    const wrapper = mount(AppVue, {});
+    const checkoutGateway = new CheckoutGatewayHttp();
+    const wrapper = mount(AppVue, {
+        global: {
+            provide: {
+                checkoutGateway
+            }
+        }
+    });
     await sleep (100);
 	expect(wrapper.get(".title").text()).toBe("Checkout");
 	expect(wrapper.findAll(".product-description").at(0)?.text()).toBe("A");

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { isTemplateNode } from '@vue/compiler-core';
-import { onMounted, reactive, ref } from 'vue';
+import { inject, onMounted, reactive, ref } from 'vue';
 import axios from "axios";
 import Order from './domain/Order';
 import CheckoutGatewayHttp from './infra/gateway/CheckoutGatewayHttp';
+import CheckoutGateway from './infra/gateway/CheckoutGateway';
 
   const products = reactive([
       { idProduct: 1, description: "A", price: 1000 },
@@ -19,7 +20,9 @@ import CheckoutGatewayHttp from './infra/gateway/CheckoutGatewayHttp';
 		return new Intl.NumberFormat("en-IN", { style: "currency", currency: "USD" }).format(amount);
 	}
 
-  const checkoutGateway = new CheckoutGatewayHttp();
+  const checkoutGateway = inject("checkoutGateway") as CheckoutGateway;
+
+  //const checkoutGateway = new CheckoutGatewayHttp();
 
   const getProductById = function (idProduct: number) {
 		return products.find((product: any) => product.idProduct === idProduct);
