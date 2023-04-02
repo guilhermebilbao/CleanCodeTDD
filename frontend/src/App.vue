@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { isTemplateNode } from '@vue/compiler-core';
+import { reactive, ref } from 'vue';
 
   const products = reactive([
       { idProduct: 1, description: "A", price: 1000 },
@@ -8,9 +9,12 @@ import { reactive } from 'vue';
     ]);
 
   const order = reactive({
+    code : "",
     items: [] as any
   });
 
+  const message = ref("");
+  
   const addItem = function (product: any) {
     const existingItem = order.items.find((item: any) => item.idProduct === product.idProduct);
     if (!existingItem){
@@ -24,6 +28,9 @@ import { reactive } from 'vue';
     const existingItem = order.items.find((item: any) => item.idProduct === idProduct);
     if (!existingItem) return;
       existingItem.quantity--;
+      if (existingItem.quantity === 0){
+        order.items.splice(order.items.indexOf(existingItem),1);
+      }
   }
 
   const increaseItem = function (idProduct : any) {
@@ -47,6 +54,13 @@ import { reactive } from 'vue';
 		return products.find((product: any) => product.idProduct === idProduct);
 	}
 
+
+	const confirm = async function (order: any) {
+    message.value = "Success";
+		order.code = "202300000001"
+	
+	}
+
 </script>
 
 <template>
@@ -62,8 +76,10 @@ import { reactive } from 'vue';
     <span class="item-quantity">{{ item.quantity }}</span>
     <button class="item-increase-button" @click="increaseItem(item.idProduct)">+</button>
     <button class="item-decrease-button" @click="decreaseItem(item.idProduct)">-</button>
-
   </div>
+  <button class="confirm" @click="confirm(order)">confirm</button>
+	<div class="message">{{ message }}</div>
+  <div class="order-code">{{ order.code }}</div>
 </template>
 
 <style scoped>
